@@ -1,5 +1,6 @@
 buildscript {
     ext.kotlin_version = '1.2.21'
+    ext.comprehend_version = '1.11.275'
 
     repositories {
         mavenCentral()
@@ -19,6 +20,19 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.budilov.aws.lambda.ComprehendLambdaKt'
+    }
+
+    // This line of code recursively collects and copies all of a project's files
+    // and adds them to the JAR itself. One can extend this task, to skip certain
+    // files or particular types at will
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    exclude('**/*.DSA')
 }
 
 dependencies {
@@ -26,11 +40,19 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'org.apache.httpcomponents:httpclient:4.5.2'
     compile group: 'rome', name: 'rome', version: '1.0'
-// https://mvnrepository.com/artifact/com.rometools/rome-fetcher
-    compile group: 'com.rometools', name: 'rome-fetcher', version: '1.9.0'
 // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-comprehend
-    compile group: 'com.amazonaws', name: 'aws-java-sdk-comprehend', version: '1.11.275'
+    compile "com.amazonaws:aws-java-sdk-comprehend:$comprehend_version"
+    compile "com.amazonaws:aws-lambda-java-events:1.3.0"
+    compile "com.amazonaws:aws-lambda-java-core:1.1.0"
 
+// jsoup HTML parser library @ https://jsoup.org/
+    compile 'org.jsoup:jsoup:1.11.2'
+
+    // For string chunking
+    compile 'com.google.guava:guava:24.0-jre'
+
+    // GSON
+    compile 'com.google.code.gson:gson:2.8.0'
 
 }
 

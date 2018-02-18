@@ -1,0 +1,27 @@
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  RegionParameter:
+    Type: String
+    Default: us-east-1
+Resources:
+  ComprehendLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.budilov.aws.lambda.ComprehendLambda::handleRequest
+      FunctionName: ComprehendLambda
+      Policies:
+       - ComprehendReadOnly
+      Runtime: java8
+      MemorySize: 1024
+      Timeout: 20
+      CodeUri: build/libs/comprehend-1.0-SNAPSHOT.jar
+      Environment:
+        Variables:
+          REGION_NAME:
+            Ref: RegionParameter
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /comprehend/url
+            Method: get
