@@ -5,7 +5,11 @@ You can deploy this project using [SAM](https://github.com/awslabs/serverless-ap
 Once deployed, you're able to query the service by including a header value of 'url', which indicates the url of the website that you want to "understand/comprehend". The
 Lambda function parses the website represented by the url and runs the body of this website through the [Amazon Comprehend](https://aws.amazon.com/comprehend) service.
 
-_NOTE:_ For the most part your test usage _should_ fall under the [Free Tier](https://aws.amazon.com/free/), 
+_NOTE 1:_ Make sure the owner of the site you're scraping allows you to do so! This is very important. If your use-case is to scrape your
+customers' sites to provide better recommendations, analysis, etc, and they know about that then you're good to go, 
+otherwise make sure you do your due-dilligence!
+
+_NOTE 2:_ For the most part your test usage _should_ fall under the [Free Tier](https://aws.amazon.com/free/), 
 but check [this](https://aws.amazon.com/free/) page to make sure, as well as your current billing levels. 
 
 ### TO-DO
