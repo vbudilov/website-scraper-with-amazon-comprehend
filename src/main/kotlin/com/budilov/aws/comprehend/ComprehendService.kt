@@ -15,6 +15,7 @@ data class PhrasesResult(val text: String,
                          val endOffset: Number)
 
 data class TokensResult(val text: String,
+                        val type: String,
                         val score: Number,
                         val beginOffset: Number,
                         val endOffset: Number)
@@ -92,7 +93,7 @@ object ComprehendService {
             }
 
             detectEntitiesResult?.entities?.forEach {
-                tokenList.add(TokensResult(it.text, it.score, it.beginOffset, it.endOffset))
+                tokenList.add(TokensResult(it.text, it.type, it.score, it.beginOffset, it.endOffset))
             }
         }
 
