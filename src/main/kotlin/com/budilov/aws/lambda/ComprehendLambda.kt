@@ -19,22 +19,32 @@ class ComprehendLambda : RequestHandler<ApiGatewayRequest.Input,
     override fun handleRequest(request: ApiGatewayRequest.Input?,
                                context: Context?): ApiGatewayResponse {
 
-        val url = request?.headers?.get("url")
+        val urlHeader = request?.headers?.get("url")
+        val urls = urlHeader?.split(',')
+
+        var fullText = ""
+
+        for (url in urls.orEmpty()) {
+
+            if (url != null) {
+                try {
+                    val doc = Jsoup.connect(url).get()
+                    fullText += " " + doc.body().text()
+                } catch (e: Exception) {
+                }
+
+            }
+        }
 
         var status = 400
         var response = ""
 
-        if (url != null) {
-            try {
-                val doc = Jsoup.connect(url).get()
-
-                response = Gson().toJson(ComprehendService.getAll(doc.body().text()))
-                println("response: $response")
-                status = 200
-            } catch (e: Exception) {
-                status = 400
-            }
-
+        try {
+            response = Gson().toJson(ComprehendService.getAll(fullText))
+            println("response: $response")
+            status = 200
+        } catch (e: Exception) {
+            status = 400
         }
 
         return ApiGatewayResponse(statusCode = status, body = response)
